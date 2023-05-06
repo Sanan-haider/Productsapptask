@@ -63,7 +63,7 @@ cursor: pointer;
 
 .forms {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
     padding: 0 30px;
 }
 
@@ -103,4 +103,46 @@ ul.prod-list button {
   border-radius: 5px;
 cursor: pointer;
 margin: 0 1px;
+}
+.add-prod{
+  background: #f00 !important;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0 1px;
+      font-size: 15px;
+  }
+  
+  ul.prod-list {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+  }
+  
+  form.searchform {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 65px;
+  }
+  .rightbuttons {
+      align-self: center;
+  }
+  
+  form.searchform label {
+    display: flex;
+    flex-direction: column;
+}  
+
+form.searchform label>input {
+  padding: 15px;
+  width: 500px;
+  height: 20px;
+}
+
+ul.prod-list>li>button {
+  margin-top: 15px;
 }
