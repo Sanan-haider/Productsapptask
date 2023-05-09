@@ -146,3 +146,16 @@ form.searchform label>input {
 ul.prod-list>li>button {
   margin-top: 15px;
 }
+.searchform .login-buttons {
+  justify-content: flex-end !important;
+  position: relative !important;
+  top: -52px !important;
+
+ 
+}
+.searchform .login-buttons button{
+
+  padding: 16px !important;
+  border-radius: 0 !important;
+
+}

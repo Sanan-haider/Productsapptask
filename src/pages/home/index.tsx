@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import AddProductForm from "../../components/AddProductForm";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import EditIcon from "@mui/icons-material/Edit";
+import { Console } from "console";
 interface Props {
   State: {
     currentPage: string;
@@ -11,6 +14,39 @@ interface Props {
   };
 }
 export default function HomePage(props: Props) {
+  const [showLogoutPopup, setShowLogoutPopup] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const handleRefresh = () => {
+    setShowLogoutPopup(true);
+  };
+
+  const handleUnload = (event: any) => {
+    if (hasUnsavedChanges()) {
+      event.preventDefault();
+      event.returnValue = "";
+      return false;
+    }
+  };
+
+  const hasUnsavedChanges = () => {
+    return true;
+  };
+  React.useEffect(() => {
+    window.addEventListener("beforeunload", handleUnload);
+    window.addEventListener("beforeunload", handleRefresh);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+      window.removeEventListener("beforeunload", handleRefresh);
+    };
+  }, []);
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
   interface Product {
     id: string;
     name: string;
@@ -82,10 +118,10 @@ export default function HomePage(props: Props) {
     }
   };
   const handleLogout = () => {
+    setShowLogoutPopup(false);
     setIsLoggedIn(false);
     setCurrentPage("login");
   };
-
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const filteredProducts = filterProducts(userProducts, searchTerm);
@@ -98,7 +134,7 @@ export default function HomePage(props: Props) {
     const newSearchTerm = event.target.value;
     setSearchTerm(newSearchTerm);
 
-    if (newSearchTerm === "") {
+    if (newSearchTerm.trim() === "") {
       // If the search term is empty, show all products
       setUserProducts(userProducts);
     }
@@ -112,73 +148,103 @@ export default function HomePage(props: Props) {
   };
   return (
     <div>
+      {showLogoutPopup && (
+        <div className="logout-confirmation-popup">
+          <p>Are you sure you want to logout?</p>
+          <div className="popu-logout">
+            {" "}
+            <button onClick={handleLogout}>Logout</button>
+            <button onClick={() => setShowLogoutPopup(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
       <nav>
         <div className="nav">
           <h2>Welcome, {UserName}</h2>
           <div className="rightbuttons">
-            {Page === "addproduct" ? null : (
-              <button
-                className="add-prod"
-                onClick={() => setPage("addproduct")}
-              >
-                Add Product
-              </button>
-            )}
+            <button className="add-prod" onClick={openModal}>
+              Add Product
+            </button>
 
-            {Page === "home" || Page === "login" ? null : (
-              <button className="add-prod" onClick={() => setPage("home")}>
-                Display Product
-              </button>
-            )}
             <button onClick={handleLogout}>Logout</button>
           </div>
         </div>
       </nav>
-      <div className="products">
-        {Page === "addproduct" ? <h2>Add Products</h2> : <h2>My Products</h2>}
 
-        {Page === "addproduct" ? (
-          <div>
-            <AddProductForm
-              UserName={UserName}
-              userProducts={userProducts}
-              setUserProducts={setUserProducts}
-            />
+      {isOpen && (
+        <div>
+          <div className="overlay"> </div>
+          <div className="modal">
+            <div className="modal-content">
+              <div className="modelclose">
+                <button onClick={closeModal}>✖</button>
+              </div>
+
+              <div className="buttonandheading">
+                <div className="headng">
+                  <h2>Add Products</h2>
+                </div>
+              </div>
+              <AddProductForm
+                UserName={UserName}
+                userProducts={userProducts}
+                setUserProducts={setUserProducts}
+              />
+            </div>
           </div>
-        ) : (
-          <div>
-            <form className="searchform" onSubmit={handleSearch}>
-              <label>
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={handleSearchTermChange}
-                />
-              </label>
+        </div>
+      )}
+
+      <div className="products">
+        <h2>My Products</h2>
+
+        <div>
+          <form className="searchform" onSubmit={handleSearch}>
+            <label>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchTermChange}
+              />
               <div className="login-buttons">
                 <button type="submit">Search</button>
               </div>
-            </form>
-            <ul className="prod-list">
+            </label>
+          </form>
+          <table className="productstable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Unit Price</th>
+                <th>Total Price</th>
+
+                <th>Edit/Delete</th>
+              </tr>
+            </thead>
+            <tbody>
               {userProducts
                 .slice()
                 .reverse()
                 .map((product) => (
-                  <li key={product.id}>
-                    <div>Name: {product.name}</div>
-                    <div>Unit Price: {product.unitPrice}</div>
-                    <div>Total Price: {product.totalPrice}</div>
-                    <button onClick={() => handleEditProduct(product)}>
-                      Edit
-                    </button>
-                    <button onClick={() => handleDeleteProduct(product)}>
-                      Delete
-                    </button>
-                  </li>
+                  <tr key={product.id}>
+                    <td>{product.name}</td>
+                    <td>{product.unitPrice}</td>
+                    <td>{product.totalPrice}</td>
+
+                    <td>
+                      <button onClick={() => handleEditProduct(product)}>
+                        <EditIcon />
+                      </button>
+
+                      <button onClick={() => handleDeleteProduct(product)}>
+                        <DeleteForeverIcon />
+                      </button>
+                    </td>
+                  </tr>
                 ))}
-            </ul>
-          </div>
-        )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { Form, Input, Button } from "antd";
 import Dispalyproducts from "../pages/home/index";
+
 interface Props {
   UserName: string;
   userProducts: Product[];
@@ -17,18 +19,15 @@ interface Product {
 const AddProductForm: React.FC<Props> = (props) => {
   const { UserName, userProducts, setUserProducts } = props;
   const [Page, setPage] = useState<string>("");
-  const [productName, setProductName] = useState("");
-  const [unitPrice, setUnitPrice] = useState("");
-  const [totalPrice, setTotalPrice] = useState("");
+  const [form] = Form.useForm();
 
-  const handleAddProduct = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleAddProduct = (values: any) => {
     const id = uuidv4();
     const product: Product = {
       id: id,
-      name: productName,
-      unitPrice: Number(unitPrice),
-      totalPrice: Number(totalPrice),
+      name: values.productName,
+      unitPrice: Number(values.unitPrice),
+      totalPrice: Number(values.totalPrice),
     };
 
     const updatedProducts = [...userProducts, product];
@@ -44,43 +43,40 @@ const AddProductForm: React.FC<Props> = (props) => {
       localStorage.setItem("data", JSON.stringify(storedData));
     }
 
-    setProductName("");
-    setUnitPrice("");
-    setTotalPrice("");
+    form.resetFields();
     setPage("displayproducts");
   };
 
   return (
     <div className="forms">
-      <form onSubmit={handleAddProduct}>
-        <label>
-          Name:
-          <input
-            type="text"
-            value={productName}
-            onChange={(event) => setProductName(event.target.value)}
-          />
-        </label>
-        <label>
-          Unit Price:
-          <input
-            type="number"
-            value={unitPrice}
-            onChange={(event) => setUnitPrice(event.target.value)}
-          />
-        </label>
-        <label>
-          Total Price:
-          <input
-            type="number"
-            value={totalPrice}
-            onChange={(event) => setTotalPrice(event.target.value)}
-          />
-        </label>
+      <Form form={form} onFinish={handleAddProduct}>
+        <Form.Item
+          label="Name"
+          name="productName"
+          rules={[{ required: true, message: "Please enter the product name" }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Unit Price"
+          name="unitPrice"
+          rules={[{ required: true, message: "Please enter the unit price" }]}
+        >
+          <Input type="number" />
+        </Form.Item>
+        <Form.Item
+          label="Total Price"
+          name="totalPrice"
+          rules={[{ required: true, message: "Please enter the total price" }]}
+        >
+          <Input type="number" />
+        </Form.Item>
         <div className="login-buttons">
-          <button type="submit">Save</button>
+          <Button type="primary" htmlType="submit">
+            Save
+          </Button>
         </div>
-      </form>
+      </Form>
     </div>
   );
 };
