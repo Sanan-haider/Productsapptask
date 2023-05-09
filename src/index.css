@@ -159,3 +159,117 @@ ul.prod-list>li>button {
   border-radius: 0 !important;
 
 }
+
+
+
+.productstable {
+  width: 100%;
+padding: 0 50px;
+border-spacing: 0;
+}
+
+.productstable td{
+text-align:center
+}
+.productstable th{
+border:1px solid #ccc;
+}
+.productstable td{
+border:1px solid #ccc;
+}
+
+.productstable button {
+  background: #fff;
+  border: 0; 
+cursor:pointer
+}
+
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 999;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 80%;
+  box-shadow: rgb(0 0 0 / 15%) 0px 5px 15px 0px;
+
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: #111;
+  opacity: 0.7;
+}
+
+.buttonandheading {
+  display: flex;
+  justify-content: center;
+
+}
+
+.modal-content .modelclose button{
+background: #fff !important;
+padding: 10px 15px;
+  border: 2px solid #000;
+cursor:pointer !important;
+  border-radius: 50%;
+}
+.modelclose {
+  display: flex;
+  justify-content: end;
+}
+.modelclose button {
+   margin: 8px 8px 0 0;
+}
+.modal-content .forms{
+  padding: 40px 0;
+}
+.forms .ant-form-item-required::before {
+  display: none !important;
+}
+
+.forms .ant-row {
+  flex-direction: column;
+}
+.forms .ant-form-item-label {
+  text-align: start !important;
+}
+
+.forms form {
+  gap: 30px !important;
+}
+
+.forms .login-buttons button {
+ padding: 5px 15px !important;
+}
+
+.forms .ant-form-item.css-dev-only-do-not-override-ed5zg0.ant-form-item-with-help.ant-form-item-has-error {
+line-height:22px !important;
+margin-bottom:50px
+}
+
+.logout-confirmation-popup {
+text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 999;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 80%;
+  box-shadow: rgb(0 0 0 / 15%) 0px 5px 15px 0px;
+}
+
+.popu-logout button {
+  background: #000;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 1px;
+}
